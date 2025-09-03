@@ -7,6 +7,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "noEmitOnError": false,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -27,6 +28,13 @@
     },
     "types": ["node", "next-auth"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.js", "types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next.config.js",
+    "types/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }
