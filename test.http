@@ -1,0 +1,7 @@
+POST http://localhost:3000/api/image
+Content-Type: application/json
+
+{
+  "script": "A beautiful sunrise over the mountains",
+  "style": "realistic"
+}

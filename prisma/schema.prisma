@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      Role     @default(USER)
+  isActive  Boolean  @default(true)
+  tokens    Token[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Platform {
+  id      String  @id @default(cuid())
+  name    String  @unique               // facebook / twitter / linkedin / youtube
+  scopes  String[]                      // required scopes
+  tokens  Token[]
+}
+
+model Token {
+  id                 String    @id @default(cuid())
+  platformId         String
+  platform           Platform  @relation(fields: [platformId], references: [id])
+  userId             String
+  user               User      @relation(fields: [userId], references: [id])
+  accessToken        String    // encrypted
+  refreshToken       String?   // encrypted
+  expiresAt          DateTime
+  lastRefreshed      DateTime  @default(now())
+  rateLimitRemaining Int?      @default(1000)
+  rateLimitReset     DateTime?
+  isActive           Boolean   @default(true)
+  scopes             String[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // ✅ Composite unique constraint (fixes your TypeScript error)
+  @@unique([userId, platformId])
+
+  // ✅ Indexes for faster queries
+  @@index([isActive])
+  @@index([expiresAt])
+  @@index([lastRefreshed])
+}
+
+enum Role {
+  ADMIN
+  USER
+}
